@@ -5,6 +5,6 @@ class Plateau
   # @param [Integer] x the x coordinate
   # @param [Integer] y the y coordinate
   def initialize(coordinates)
-    @x, @y = coordinates
+    @x, @y = coordinates.map(&:to_i)
   end
 end
