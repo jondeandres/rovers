@@ -29,6 +29,7 @@ class App
       rover = Rover.new(plateau, position)
 
       move_rover(rover, instructions_line)
+      rover.show_position
     end
   end
 
@@ -42,7 +43,6 @@ class App
       unless method
         raise 'Wrong statement: #{char}'
       end
-
       rover.send(method)
     end
   end
