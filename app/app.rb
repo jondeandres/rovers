@@ -1,5 +1,8 @@
+require 'active_support/core_ext/string'
+
 require 'plateau'
 require 'rover'
+Dir[File.expand_path('../commands/**/*.rb', __FILE__)].each{ |f| require(f) }
 
 class App
   attr_reader :data
@@ -38,12 +41,8 @@ class App
   # @param [String] instructions the instructions to send to the {Rover}
   def move_rover(rover, instructions)
     instructions.each_char do |char|
-      method = method_from_char(char)
-
-      unless method
-        raise 'Wrong statement: #{char}'
-      end
-      rover.send(method)
+      klass = command_for_char(char)
+      klass.call(rover)
     end
   end
 
@@ -61,7 +60,9 @@ class App
   # Gets the {Rover} method to use for the char received
   # @param [String] char the char to find in the {INPUT_MAPPING} hash
   # @return [Symbol, NilClass]
-  def method_from_char(char)
-    INPUT_MAPPING[char]
+  def command_for_char(char)
+    Commands.const_get(INPUT_MAPPING[char].to_s.classify)
+  rescue NameError
+    raise "Cannot find command for #{char}."
   end
 end

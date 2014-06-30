@@ -17,7 +17,7 @@ MMRMMRMRRM
   subject { App.new(file_name) }
 
   before do
-    File.should_receive(:open).
+    allow(File).to receive(:open).
       with(file_name, 'r').
       and_return(file)
   end
@@ -48,29 +48,29 @@ MMRMMRMRRM
     end
   end
 
-  describe '#method_from_char' do
-    shared_examples('method from char') do
-      it 'returns the proper mehod name' do
-        expect(subject.method_from_char(char)).to be_eql(method_name)
+  describe '#command_for_char' do
+    shared_examples('command from char') do
+      it 'returns the proper command class' do
+        expect(subject.command_for_char(char)).to be_eql(command_class)
       end
     end
 
     context 'with L' do
       let(:char) { 'L' }
-      let(:method_name) { :spin_left }
-      it_should_behave_like 'method from char'
+      let(:command_class) { Commands::SpinLeft }
+      it_should_behave_like 'command from char'
     end
 
     context 'with R' do
       let(:char) { 'R' }
-      let(:method_name) { :spin_right }
-      it_should_behave_like 'method from char'
+      let(:command_class) { Commands::SpinRight }
+      it_should_behave_like 'command from char'
     end
 
     context 'with M' do
       let(:char) { 'M' }
-      let(:method_name) { :move_forward }
-      it_should_behave_like 'method from char'
+      let(:command_class) { Commands::MoveForward }
+      it_should_behave_like 'command from char'
     end
   end
 
@@ -97,7 +97,9 @@ MMRMMRMRRM
       let(:instructions) { "LRM" }
 
       before do
-        expect(rover).to receive(:send).exactly(3)
+        expect(Commands::SpinLeft).to receive(:call).once
+        expect(Commands::SpinRight).to receive(:call).once
+        expect(Commands::MoveForward).to receive(:call).once
       end
 
       it { subject.move_rover(rover, instructions) }

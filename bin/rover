@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
-
 $:.unshift(File.expand_path('../app', File.dirname(__FILE__)))
+$:.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
+
 require 'app'
 
 app = App.new(ARGV[0])
