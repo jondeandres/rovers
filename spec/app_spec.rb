@@ -13,9 +13,8 @@ LMLMLMLMM
 MMRMMRMRRM
       END
     end
-  let(:instance) { App.new(file_name) }
 
-  subject { instance }
+  subject { App.new(file_name) }
 
   before do
     File.should_receive(:open).
@@ -25,7 +24,7 @@ MMRMMRMRRM
 
   describe '.new' do
     it 'splits the lines and saves them as instance variable' do
-      subject.data.should eql([
+      expect(subject.data).to be_eql([
           '5 5', '1 2 N',
           'LMLMLMLMM', '3 3 E',
           'MMRMMRMRRM'
@@ -37,7 +36,7 @@ MMRMMRMRRM
     let(:line) { "4 10" }
 
     it 'parses properly the plateau coordinates' do
-      subject.parse_coordinates(line).should eql(['4', '10'])
+      expect(subject.parse_coordinates(line)).to be_eql(['4', '10'])
     end
   end
 
@@ -45,14 +44,14 @@ MMRMMRMRRM
     let(:line) { "1 5 N" }
 
     it 'parses properly the position' do
-      subject.parse_position(line).should eql(['1', '5', 'N'])
+      expect(subject.parse_position(line)).to be_eql(['1', '5', 'N'])
     end
   end
 
   describe '#method_from_char' do
     shared_examples('method from char') do
       it 'returns the proper mehod name' do
-        instance.method_from_char(char).should eql(method_name)
+        expect(subject.method_from_char(char)).to be_eql(method_name)
       end
     end
 
@@ -77,15 +76,15 @@ MMRMMRMRRM
 
   describe '#run' do
     before do
-      Plateau.should_receive(:new).with(["5", "5"])
-      instance.should_receive(:move_rover).
+      expect(Plateau).to receive(:new).with(["5", "5"])
+      expect(subject).to receive(:move_rover).
         with(a_kind_of(Rover), "LMLMLMLMM").once
-      instance.should_receive(:move_rover).
+      expect(subject).to receive(:move_rover).
         with(a_kind_of(Rover), "MMRMMRMRRM").once
     end
 
     it 'moves the rovers' do
-      instance.run
+      subject.run
     end
   end
 
@@ -98,7 +97,7 @@ MMRMMRMRRM
       let(:instructions) { "LRM" }
 
       before do
-        rover.should_receive(:send).exactly(3)
+        expect(rover).to receive(:send).exactly(3)
       end
 
       it { subject.move_rover(rover, instructions) }
