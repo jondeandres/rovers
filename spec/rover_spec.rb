@@ -11,14 +11,19 @@ describe Rover do
       let(:rover) { Rover.new(plateau, ['0', '0', 'N']) }
       subject { rover }
       before { subject.spin_left }
-      its(:orientation_index) { should eql(3) }
+
+      it 'changes the orientation index to 3' do
+        expect(subject.orientation_index).to be 3
+      end
     end
 
     context 'actually in South' do
       let(:rover) { Rover.new(plateau, ['0', '0', 'S']) }
       subject { rover }
       before { subject.spin_left }
-      its(:orientation_index) { should eql(1) }
+      it 'changes the orientation index to 1' do
+        expect(subject.orientation_index).to be 1
+      end
     end
   end
 
@@ -27,14 +32,20 @@ describe Rover do
       let(:rover) { Rover.new(plateau, ['0', '0', 'N']) }
       subject { rover }
       before { subject.spin_right }
-      its(:orientation_index) { should eql(1) }
+
+      it 'changes the orientation index to 1' do
+        expect(subject.orientation_index).to be 1
+      end
     end
 
     context 'actually in West' do
       let(:rover) { Rover.new(plateau, ['0', '0', 'W']) }
       subject { rover }
       before { subject.spin_right }
-      its(:orientation_index) { should eql(0) }
+
+      it 'changes the orientation index to 0' do
+        expect(subject.orientation_index).to be 0
+      end
     end
   end
 
@@ -73,7 +84,7 @@ describe Rover do
 
     shared_examples 'cannot move' do
       it 'cannot move to that coordinates' do
-        rover.can_move_to?(coordinates).should be_false
+        expect(rover.can_move_to?(coordinates)).to be(false)
       end
     end
 
@@ -101,7 +112,7 @@ describe Rover do
       let(:coordinates) { [2, 3] }
 
       it 'moves to that coordinates' do
-        rover.can_move_to?(coordinates).should be_true
+        expect(rover.can_move_to?(coordinates)).to be(true)
       end
     end
   end
