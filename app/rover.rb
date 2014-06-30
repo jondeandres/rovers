@@ -20,8 +20,4 @@ class Rover
   def orientation
     ORIENTATIONS[orientation_index]
   end
-
-  def show_position
-    puts "#{x} #{y} #{orientation}"
-  end
 end
