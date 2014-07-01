@@ -20,34 +20,46 @@ module Rovers
     end
 
     def generate_tree(plateau_size, input)
-      reduce_slices(input) do |tree, (position, commands)|
-        rover_children = [move_rover(commands), show_position]
-        rover_node = create_rover(position, rover_children)
-        plateau_node = create_plateau(plateau_size, [rover_node])
+      plateau_node(plateau_size, parse_rovers(input))
+    end
 
-        tree << plateau_node
+    def parse_rovers(input)
+      map_slices(input) do |position, commands|
+        rover_node(position, parse_rover_children(commands))
       end
     end
 
-    def reduce_slices(input)
-      input.enum_for(:each_slice, 2).reduce([]) do |*args|
+    def map_slices(input)
+      input.enum_for(:each_slice, 2).map do |*args|
         yield(*args)
       end
     end
 
-    def create_plateau(size, children)
-      Node.new('create_plateau', size.split(' '), children)
+    def parse_rover_children(commands)
+      command_children = commands.chars.reduce([]) do |children, command|
+        children << movement_node(command)
+      end
+
+      command_children + default_rover_children
     end
 
-    def create_rover(position, children)
-      Node.new('create_rover', position.split(' '), children)
+    def default_rover_children
+      [show_position_node]
     end
 
-    def move_rover(commands)
-      Node.new('move_rover', commands.chars, [])
+    def plateau_node(size, children = [])
+      Node.new('create_plateau', [size.split(' ')], children)
     end
 
-    def show_position
+    def rover_node(position, children = [])
+      Node.new('create_rover', [position.split(' ')], children)
+    end
+
+    def movement_node(command)
+      Node.new('movement', [command], [])
+    end
+
+    def show_position_node
       Node.new('show_position', [], [])
     end
   end
