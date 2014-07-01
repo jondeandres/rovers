@@ -2,7 +2,8 @@
 $:.unshift(File.expand_path('../app', File.dirname(__FILE__)))
 $:.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
 
-require 'app'
+require 'rovers/parser'
+require 'rovers/eval'
 
-app = App.new(ARGV[0])
-app.run
+parser = Rovers::Parser.new(STDIN.read)
+Rovers::Eval::Evaluator.new(parser.parse!).eval

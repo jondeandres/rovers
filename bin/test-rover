@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-output = %x{./bin/rover data/input}
+output = %x{cat data/input | ./bin/rover}
 expected = File.open('data/output', 'r').read
 
 if output == expected
