@@ -1,11 +1,12 @@
+require 'rovers/node_factory'
+
 module Rovers
   class Parser
-    attr_reader :input
-
-    class Node < Struct.new(:name, :args, :children); end
+    attr_reader :input, :factory
 
     def initialize(input)
       @input = input.split("\n")
+      @factory = Rovers::NodeFactory.new
     end
 
     def parse!
@@ -20,12 +21,12 @@ module Rovers
     end
 
     def generate_tree(plateau_size, input)
-      plateau_node(plateau_size, parse_rovers(input))
+      factory.plateau_node(plateau_size, parse_rovers(input))
     end
 
     def parse_rovers(input)
       map_slices(input) do |position, commands|
-        rover_node(position, parse_rover_children(commands))
+        factory.rover_node(position, parse_rover_children(commands))
       end
     end
 
@@ -37,30 +38,14 @@ module Rovers
 
     def parse_rover_children(commands)
       command_children = commands.chars.reduce([]) do |children, command|
-        children << movement_node(command)
+        children << factory.command_node(command)
       end
 
       command_children + default_rover_children
     end
 
     def default_rover_children
-      [show_position_node]
-    end
-
-    def plateau_node(size, children = [])
-      Node.new('create_plateau', [size.split(' ')], children)
-    end
-
-    def rover_node(position, children = [])
-      Node.new('create_rover', [position.split(' ')], children)
-    end
-
-    def movement_node(command)
-      Node.new('movement', [command], [])
-    end
-
-    def show_position_node
-      Node.new('show_position', [], [])
+      [factory.command_node('S')]
     end
   end
 end
