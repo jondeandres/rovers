@@ -14,7 +14,7 @@ module Rovers
         'S' => :show_position
       }
 
-      def create_plateau(args, _)
+      def create_plateau(args, _ = nil)
         Plateau.new(*args)
       end
 
