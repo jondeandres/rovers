@@ -1,3 +1,5 @@
+require 'rovers/eval/operators'
+
 module Rovers
   module Eval
     class Evaluator
