@@ -18,16 +18,16 @@ describe Rovers::Eval::Operators do
     end
   end
 
-  describe '#command' do
+  describe '#movement' do
     let(:rover) { Rover.new(plateau, ['1 1 N']) }
 
     context 'with existing command class' do
-      let(:args) { ['S'] }
+      let(:args) { ['L'] }
 
       it 'calls the correct command' do
-        expect(Commands::ShowPosition).to receive(:call).with(rover)
+        expect(Commands::SpinLeft).to receive(:call).with(rover)
 
-        subject.command(args, rover)
+        subject.movement(args, rover)
       end
     end
 

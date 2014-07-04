@@ -10,8 +10,18 @@ module Rovers
       Node.new('create_rover', [position.split(' ')], children)
     end
 
-    def command_node(command)
-      Node.new('command', [command], [])
+    def movement_node(command)
+      Node.new('movement', [command], [])
+    end
+
+    def rocket_node(args)
+      coords = args.scan(/\d+/)
+
+      Node.new('launch_rocket', [coords], [])
+    end
+
+    def position_node
+      Node.new('position', [], [])
     end
   end
 end

@@ -17,13 +17,13 @@ describe Rovers::Parser do
 
       rover1 = children[0]
       expect(rover1.name).to be_eql('create_rover')
-      expect(rover1.children.first.name).to be_eql('command')
-      expect(rover1.children.last.args).to be_eql(['S'])
+      expect(rover1.children.first.name).to be_eql('movement')
+      expect(rover1.children.last.name).to be_eql('position')
 
       rover2 = children[1]
       expect(rover2.name).to be_eql('create_rover')
-      expect(rover1.children.first.name).to be_eql('command')
-      expect(rover1.children.last.args).to be_eql(['S'])
+      expect(rover1.children.first.name).to be_eql('movement')
+      expect(rover1.children.last.name).to be_eql('position')
     end
   end
 end

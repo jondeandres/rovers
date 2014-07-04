@@ -7,11 +7,10 @@ Dir[File.expand_path('../../../../app/commands/**/*.rb', __FILE__)].each{ |f| re
 module Rovers
   module Eval
     class Operators
-      COMMANDS_MAPPING = {
+      MOVEMENTS_MAPPING = {
         'L' => :spin_left,
         'R' => :spin_right,
-        'M' => :move_forward,
-        'S' => :show_position
+        'M' => :move_forward
       }
 
       def create_plateau(args, _ = nil)
@@ -22,15 +21,23 @@ module Rovers
         Rover.new(plateau, *args)
       end
 
-      def command(args, rover)
-        klass = command_for_char(*args)
+      def movement(args, rover)
+        klass = movement_for_char(*args)
         klass.call(rover)
+      end
+
+      def launch_rocket(args, rover)
+        Commands::LaunchRocket.call(rover, *args)
+      end
+
+      def position(args, rover)
+        Commands::ShowPosition.call(rover)
       end
 
       private
 
-      def command_for_char(char)
-        Commands.const_get(COMMANDS_MAPPING[char].to_s.classify)
+      def movement_for_char(char)
+        Commands.const_get(MOVEMENTS_MAPPING[char].to_s.classify)
       rescue NameError
         raise "Cannot find command for #{char}."
       end

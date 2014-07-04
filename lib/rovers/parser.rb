@@ -37,15 +37,37 @@ module Rovers
     end
 
     def parse_rover_children(commands)
-      command_children = commands.chars.reduce([]) do |children, command|
-        children << factory.command_node(command)
+      command_children = reduce_commands(commands) do |children, (command, op, args)|
+        children << parse_rover_command(op, args)
       end
 
       command_children + default_rover_children
     end
 
+    def parse_rover_command(op, args)
+      if op =~ movements_regex
+        factory.movement_node(op)
+      elsif op == 'X'
+        factory.rocket_node(args)
+      end
+    end
+
+    def reduce_commands(commands)
+      commands.scan(rover_commands_regex).reduce([]) do |*args|
+        yield(*args)
+      end
+    end
+
+    def rover_commands_regex
+       /(([A-Z])({.*}){0,1}){1}/
+    end
+
+    def movements_regex
+      /L|M|R/
+    end
+
     def default_rover_children
-      [factory.command_node('S')]
+      [factory.position_node]
     end
   end
 end
